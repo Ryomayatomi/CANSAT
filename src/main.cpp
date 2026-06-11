@@ -1,13 +1,20 @@
 #include <Arduino.h>
+#include "sensor.h"
 
-void setup()
-{
+void setup() {
     Serial.begin(115200);
-    Serial.println("Hello CanSat!");
+
+    if(!initSensors()){
+        Serial.println("Sensor Error");
+    }
 }
 
-void loop()
-{
-    Serial.println("ESP32 OK");
+void loop() {
+
+    SensorData data = readSensors();
+
+    Serial.print("Temp:");
+    Serial.println(data.temperature);
+
     delay(1000);
 }
