@@ -1,31 +1,34 @@
 #include <Arduino.h>
 #include "sensor.h"
+#include "display.h"
 
 void setup()
 {
     Serial.begin(115200);
 
-    if (!initSensors()) {
+    if(!initSensors())
+    {
         Serial.println("Sensor Error");
-        while (1);
+        while(1);
     }
 
-    Serial.println("Sensor OK");
+    if(!initDisplay())
+    {
+        Serial.println("Display Error");
+        while(1);
+    }
+
+    Serial.println("System OK");
 }
 
 void loop()
 {
     SensorData data = readSensors();
 
-    Serial.print("Temp: ");
-    Serial.print(data.temperature);
-    Serial.println(" C");
+    updateDisplay(
+        data.temperature,
+        data.humidity
+    );
 
-    Serial.print("Humidity: ");
-    Serial.print(data.humidity);
-    Serial.println(" %");
-
-    Serial.println();
-
-    delay(2000);
+    delay(1000);
 }
