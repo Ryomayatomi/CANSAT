@@ -1,31 +1,28 @@
 #include <Arduino.h>
-#include <Wire.h>
-#include <Adafruit_AHTX0.h>
+#include "sensor.h"
 
-Adafruit_AHTX0 aht;
-
-void setup() {
+void setup()
+{
     Serial.begin(115200);
 
-    if (!aht.begin()) {
-        Serial.println("AHT20 Error");
+    if (!initSensors()) {
+        Serial.println("Sensor Error");
         while (1);
     }
 
-    Serial.println("AHT20 OK");
+    Serial.println("Sensor OK");
 }
 
-void loop() {
-    sensors_event_t humidity, temp;
-
-    aht.getEvent(&humidity, &temp);
+void loop()
+{
+    SensorData data = readSensors();
 
     Serial.print("Temp: ");
-    Serial.print(temp.temperature);
+    Serial.print(data.temperature);
     Serial.println(" C");
 
     Serial.print("Humidity: ");
-    Serial.print(humidity.relative_humidity);
+    Serial.print(data.humidity);
     Serial.println(" %");
 
     Serial.println();
