@@ -25,6 +25,12 @@ void loop()
 {
     SensorData data = readSensors();
 
+    Serial.print("Temp=");
+    Serial.print(data.temperature);
+
+    Serial.print(" Hum=");
+    Serial.println(data.humidity);
+
     updateDisplay(
         data.temperature,
         data.humidity

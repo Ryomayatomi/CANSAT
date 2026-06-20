@@ -16,11 +16,24 @@ Adafruit_SSD1306 display(
 
 bool initDisplay()
 {
+    Wire.begin(21,22);
+
     if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+    {
+        Serial.println("OLED FAIL");
         return false;
+    }
+
+    Serial.println("OLED OK");
 
     display.clearDisplay();
+    display.setTextSize(2);
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(0,0);
+    display.println("OLED OK");
     display.display();
+
+    delay(5000);
 
     return true;
 }
