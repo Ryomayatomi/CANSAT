@@ -1,5 +1,7 @@
 #include <Arduino.h>
+
 #include "sensor.h"
+#include "display.h"
 
 void setup()
 {
@@ -11,7 +13,13 @@ void setup()
         while (1);
     }
 
-    Serial.println("Sensor OK");
+    if (!initDisplay())
+    {
+        Serial.println("Display Error");
+        while (1);
+    }
+
+    Serial.println("System OK");
 }
 
 void loop()
@@ -32,6 +40,14 @@ void loop()
 
     Serial.print(" AZ=");
     Serial.println(data.az);
+
+    updateDisplay(
+        data.temperature,
+        data.humidity,
+        data.ax,
+        data.ay,
+        data.az
+    );
 
     delay(500);
 }
