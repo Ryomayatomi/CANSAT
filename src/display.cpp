@@ -30,6 +30,7 @@ bool initDisplay()
 void updateDisplay(
     float temp,
     float hum,
+    float pressure,
     float ax,
     float ay,
     float az

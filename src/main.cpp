@@ -1,53 +1,50 @@
 #include <Arduino.h>
-
-#include "sensor.h"
-#include "display.h"
+#include "gps.h"
 
 void setup()
 {
     Serial.begin(115200);
 
-    if (!initSensors())
-    {
-        Serial.println("Sensor Error");
-        while (1);
-    }
+    initGPS();
 
-    if (!initDisplay())
-    {
-        Serial.println("Display Error");
-        while (1);
-    }
-
-    Serial.println("System OK");
+    Serial.println("GPS Start");
 }
 
 void loop()
 {
-    SensorData data = readSensors();
+    updateGPS();
 
-    Serial.print("T=");
-    Serial.print(data.temperature);
+    if (gps.location.isUpdated())
+    {
+        Serial.println("------------");
 
-    Serial.print(" H=");
-    Serial.print(data.humidity);
+        Serial.print("Latitude : ");
+        Serial.println(gps.location.lat(), 6);
 
-    Serial.print(" AX=");
-    Serial.print(data.ax);
+        Serial.print("Longitude: ");
+        Serial.println(gps.location.lng(), 6);
 
-    Serial.print(" AY=");
-    Serial.print(data.ay);
+        Serial.print("Altitude : ");
+        Serial.print(gps.altitude.meters());
+        Serial.println(" m");
 
-    Serial.print(" AZ=");
-    Serial.println(data.az);
+        Serial.print("Satellites: ");
+        Serial.println(gps.satellites.value());
 
-    updateDisplay(
-        data.temperature,
-        data.humidity,
-        data.ax,
-        data.ay,
-        data.az
-    );
+        Serial.print("HDOP: ");
+        Serial.println(gps.hdop.value());
 
-    delay(500);
+        Serial.print("Speed: ");
+        Serial.print(gps.speed.kmph());
+        Serial.println(" km/h");
+
+        Serial.print("Time: ");
+        Serial.print(gps.time.hour());
+        Serial.print(":");
+        Serial.print(gps.time.minute());
+        Serial.print(":");
+        Serial.println(gps.time.second());
+
+        Serial.println("------------");
+    }
 }
